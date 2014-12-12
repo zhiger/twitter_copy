@@ -6,9 +6,15 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: {minimum: 6}
   
   has_secure_password
+  has_many :microposts, dependent: :destroy
   
   before_save { self.email = self.email.downcase }
   before_create :create_remember_token
+  
+  def feed
+    # Это предварительное решение. См. полную реализацию в "Following users".
+    microposts
+  end
   
   def User.new_remember_token
     SecureRandom.urlsafe_base64
